@@ -1,6 +1,6 @@
 plugins {
-    kotlin("multiplatform") version "1.6.21"
-    id("com.github.johnrengelman.shadow") version "5.2.0"
+    kotlin("multiplatform") version "1.8.21"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "cz.cuni.gamedev.nail123"
@@ -19,14 +19,6 @@ kotlin {
             useJUnit()
         }
         withJava()
-    }
-    js(LEGACY) {
-        binaries.executable()
-        browser {
-            commonWebpackConfig {
-                cssSupport.enabled = true
-            }
-        }
     }
     sourceSets {
         val commonMain by getting
@@ -49,12 +41,6 @@ kotlin {
                 implementation(kotlin("test-junit"))
             }
         }
-        val jsMain by getting
-        val jsTest by getting {
-            dependencies {
-                implementation(kotlin("test-js"))
-            }
-        }
     }
 }
 
@@ -69,6 +55,7 @@ tasks {
         distributionType = Wrapper.DistributionType.ALL
     }
     getByName<ProcessResources>("jvmProcessResources") {
+        dependsOn("zipTilesets")
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
     getByName<Jar>("shadowJar") {
@@ -84,7 +71,7 @@ tasks.register<JavaExec>("renderPng") {
     dependsOn("zipTilesets", "compileKotlinJvm")
 
     classpath = sourceSets["main"].runtimeClasspath
-    main = "cz.cuni.gamedev.nail123.roguelike.RenderAreaKt"
+    mainClass.set("cz.cuni.gamedev.nail123.roguelike.RenderAreaKt")
 }
 
 tasks.register<JavaExec>("playGame") {
@@ -92,7 +79,7 @@ tasks.register<JavaExec>("playGame") {
     dependsOn("zipTilesets", "compileKotlinJvm")
 
     classpath = sourceSets["main"].runtimeClasspath
-    main = "cz.cuni.gamedev.nail123.roguelike.RunGameKt"
+    mainClass.set("cz.cuni.gamedev.nail123.roguelike.RunGameKt")
 }
 
 val tilesetDirectories: Array<File> = File("tilesets").listFiles(File::isDirectory)!!
