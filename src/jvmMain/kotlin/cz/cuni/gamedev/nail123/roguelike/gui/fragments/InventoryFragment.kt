@@ -7,8 +7,9 @@ import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.component.Fragment
 
 class InventoryFragment(val world: World): Fragment {
+    val width: Int = GameConfig.SIDEBAR_WIDTH - 2
     val inventoryBox = Components.paragraph()
-            .withSize(GameConfig.SIDEBAR_WIDTH - 2, 8)
+            .withSize(width, 8)
             .build()
 
     val selectedIndexProperty = createPropertyFrom(-1)
@@ -17,7 +18,7 @@ class InventoryFragment(val world: World): Fragment {
         set(value) { selectedIndexProperty.value = value }
 
     override val root = Components.vbox()
-            .withSize(GameConfig.SIDEBAR_WIDTH - 2, 10)
+            .withSize(width, 10)
             .withPosition(0, 10)
             .withSpacing(0)
             .build().apply {
@@ -33,8 +34,14 @@ class InventoryFragment(val world: World): Fragment {
             inventoryBox.text = inventory.items.mapIndexed { i, item ->
                 val prefix = if (selectedIndex == i) ">" else ""
                 val suffix = if (item.isEquipped) " E" else ""
-                "$prefix$item$suffix"
+                val line = "$prefix$item$suffix"
+                // Pad until the end of the next line
+
+                line.padEnd(nearestGreaterThanOrEqualMultiple(line.length, width - 1))
             }.joinToString("\n")
         }
     }
+
+    fun nearestGreaterThanOrEqualMultiple(value: Int, mult: Int): Int
+        = (value + (mult - 1)) / mult * mult
 }
