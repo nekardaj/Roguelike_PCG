@@ -34,16 +34,20 @@ fun interactionContext(other: GameEntity, type: InteractionType, scopeFunc: Inte
 
 /**
  * Perform an interaction of an entity and a target block. Currently only first-found is performed, but this may change.
+ * Interaction of type BUMPED with non-blocking entities is not allowed.
  * @return Whether an interaction occured.
  */
 fun interaction(source: GameEntity, target: GameBlock, type: InteractionType): Boolean {
     if (source is Interacting) {
-        target.entities.forEach {
-            if (source.interactWith(it, type)) return true
+        for (entity in target.entities.reversed()) {
+            if (type == InteractionType.BUMPED && !entity.blocksMovement) continue
+            if (source.interactWith(entity, type)) return true
         }
     }
-    target.entities.filterIsInstance<Interactable>().forEach {
-        if (it.acceptInteractFrom(source, type)) return true
+    for (entity in target.entities.reversed()) {
+        if (entity !is Interactable) continue
+        if (type == InteractionType.BUMPED && !entity.blocksMovement) continue
+        if (entity.acceptInteractFrom(source, type)) return true
     }
     return false
 }
