@@ -1,4 +1,6 @@
-# Rogue-like template
+# Rogue-like dungeon crawler
+
+Fork of rogue-like base from PCG course
 
 Kotlin rogue-like template built on top of [Zircon](https://github.com/Hexworks/zircon).
 
@@ -20,9 +22,10 @@ Java 8+.
 The whole project features the Gradle build-system with several simple-to-use tasks in the `custom` group.
 
 These include:
- - `renderPng` - renders the first level into `out/render.png`
- - `playGame` - launches the game on JVM
- - `shadowJar` - will build a runnable JAR into `build/libs/roguelike-<version>-all.jar`
+
+- `renderPng` - renders the first level into `out/render.png`
+- `playGame` - launches the game on JVM
+- `shadowJar` - will build a runnable JAR into `build/libs/roguelike-<version>-all.jar`
 
 ## Documentation
 
