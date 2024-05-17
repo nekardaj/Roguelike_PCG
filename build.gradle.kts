@@ -1,5 +1,5 @@
 plugins {
-    kotlin("multiplatform") version "1.8.21"
+    kotlin("multiplatform") version "1.9.24"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -13,7 +13,7 @@ repositories {
 kotlin {
     jvm {
         compilations.all {
-            kotlinOptions.jvmTarget = "17"
+            kotlinOptions.jvmTarget = "21"
         }
         testRuns["test"].executionTask.configure {
             useJUnit()
@@ -58,11 +58,12 @@ tasks {
         dependsOn("zipTilesets")
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
-    getByName<Jar>("shadowJar") {
-        manifest {
-            attributes["Main-Class"] = "cz.cuni.gamedev.nail123.roguelike.MainKt"
-        }
-    }
+    // Temporary not working
+//    getByName<Jar>("shadowJar") {
+//        manifest {
+//            attributes["Main-Class"] = "cz.cuni.gamedev.nail123.roguelike.MainKt"
+//        }
+//    }
     getByName("compileKotlinJvm") { mustRunAfter("zipTilesets") }
 }
 
